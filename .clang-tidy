@@ -1,0 +1,8 @@
+Checks: '-*,bitcoin-*'
+HeaderFilterRegex: '.'
+WarningsAsErrors: '*'
+CheckOptions:
+  - key: bitcoin-accessor-rewrite.Class
+    value: COutPoint
+  - key: bitcoin-accessor-rewrite.Mappings
+    value: hash:txid,n:index
