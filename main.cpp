@@ -1,13 +1,16 @@
 #include <clang-tidy/ClangTidyModule.h>
 
-#include "accessor-rewrite.h"
+#include "outpoint-assignment.h"
+#include "outpoint-observers.h"
 
 class BitcoinModule final : public clang::tidy::ClangTidyModule
 {
 public:
-  void addCheckFactories(clang::tidy::ClangTidyCheckFactories& Factories) override
+  void addCheckFactories(
+    clang::tidy::ClangTidyCheckFactories& Factories) override
   {
-    Factories.registerCheck<AccessorRewriteCheck>("bitcoin-accessor-rewrite");
+    Factories.registerCheck<OutpointAssignment>("bitcoin-outpoint-assignment");
+    Factories.registerCheck<OutpointObservers>("bitcoin-outpoint-observers");
   }
 };
 
