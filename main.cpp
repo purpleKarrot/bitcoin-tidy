@@ -1,7 +1,7 @@
 #include <clang-tidy/ClangTidyModule.h>
 
+#include "observers.h"
 #include "outpoint-assignment.h"
-#include "outpoint-observers.h"
 
 class BitcoinModule final : public clang::tidy::ClangTidyModule
 {
@@ -11,6 +11,11 @@ public:
   {
     Factories.registerCheck<OutpointAssignment>("bitcoin-outpoint-assignment");
     Factories.registerCheck<OutpointObservers>("bitcoin-outpoint-observers");
+    Factories.registerCheck<TxinObservers>("bitcoin-txin-observers");
+    Factories.registerCheck<TxoutObservers>("bitcoin-txout-observers");
+    Factories.registerCheck<TxObservers>("bitcoin-tx-observers");
+    Factories.registerCheck<BlockHdrObservers>("bitcoin-blockhdr-observers");
+    Factories.registerCheck<BlockObservers>("bitcoin-block-observers");
   }
 };
 

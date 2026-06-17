@@ -1,4 +1,4 @@
-#include "outpoint-observers.h"
+#include "observers-base.h"
 
 #include <clang/AST/ExprObjC.h>
 #include <clang/Basic/SourceLocation.h>
@@ -7,17 +7,17 @@
 using namespace clang;
 using namespace clang::ast_matchers;
 
-void OutpointObservers::registerMatchers(MatchFinder* Finder)
+void ObserversBase::registerMatchers(MatchFinder* Finder)
 {
   Finder->addMatcher(
     memberExpr(
       unless(hasAncestor(functionDecl(anyOf(isImplicit(), isDefaulted())))),
-      member(fieldDecl(hasParent(cxxRecordDecl(hasName("COutPoint"))))))
+      member(fieldDecl(hasParent(cxxRecordDecl(hasName(ClassName))))))
       .bind("member"),
     this);
 }
 
-void OutpointObservers::check(MatchFinder::MatchResult const& Result)
+void ObserversBase::check(MatchFinder::MatchResult const& Result)
 {
   auto const* ME = Result.Nodes.getNodeAs<MemberExpr>("member");
   if (!ME || ME->isImplicitAccess()) {
@@ -39,10 +39,6 @@ void OutpointObservers::check(MatchFinder::MatchResult const& Result)
   if (!FD) {
     return;
   }
-
-  llvm::StringMap<std::string> MemberToAccessor;
-  MemberToAccessor["n"] = "index";
-  MemberToAccessor["hash"] = "txid";
 
   auto It = MemberToAccessor.find(FD->getNameAsString());
   if (It == MemberToAccessor.end()) {

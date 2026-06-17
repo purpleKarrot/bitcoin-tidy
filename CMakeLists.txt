@@ -5,7 +5,8 @@ find_package(Clang REQUIRED)
 
 add_library(bitcoin-tidy MODULE
   outpoint-assignment.cpp
-  outpoint-observers.cpp
+  observers-base.cpp
+  observers.cpp
   main.cpp
   )
 
