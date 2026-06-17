@@ -43,3 +43,10 @@ public:
   BlockObservers(
     clang::StringRef CheckName, clang::tidy::ClangTidyContext* Context);
 };
+
+class CoinObservers : public ObserversBase
+{
+public:
+  CoinObservers(
+    clang::StringRef CheckName, clang::tidy::ClangTidyContext* Context);
+};

@@ -66,3 +66,13 @@ BlockObservers::BlockObservers(
   MemberToAccessor["nNonce"] = "GetHeader().GetNonce";
   MemberToAccessor["vtx"] = "GetTransactions";
 }
+
+CoinObservers::CoinObservers(
+  clang::StringRef CheckName, clang::tidy::ClangTidyContext* Context)
+  : ObserversBase(CheckName, Context)
+{
+  ClassName = "Coin";
+  MemberToAccessor["out"] = "GetOutput";
+  MemberToAccessor["fCoinBase"] = "IsCoinBase";
+  MemberToAccessor["nHeight"] = "GetHeight";
+}

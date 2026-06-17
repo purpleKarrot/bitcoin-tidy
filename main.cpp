@@ -16,6 +16,7 @@ public:
     Factories.registerCheck<TxObservers>("bitcoin-tx-observers");
     Factories.registerCheck<BlockHdrObservers>("bitcoin-blockhdr-observers");
     Factories.registerCheck<BlockObservers>("bitcoin-block-observers");
+    Factories.registerCheck<CoinObservers>("bitcoin-coin-observers");
   }
 };
 
