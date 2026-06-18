@@ -1,7 +1,5 @@
 #include "observers-base.h"
 
-#include <clang/AST/ExprObjC.h>
-#include <clang/Basic/SourceLocation.h>
 #include <clang/Lex/Lexer.h>
 
 using namespace clang;

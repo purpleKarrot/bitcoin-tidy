@@ -7,6 +7,7 @@ add_library(bitcoin-tidy MODULE
   outpoint-assignment.cpp
   observers-base.cpp
   observers.cpp
+  tx-deref.cpp
   main.cpp
   )
 
