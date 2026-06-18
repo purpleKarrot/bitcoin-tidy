@@ -70,5 +70,5 @@ void ObserversBase::check(MatchFinder::MatchResult const& Result)
   }
 
   diag(ME->getMemberLoc(), "replace direct member access with accessor")
-    << FixItHint::CreateReplacement(ME->getMemberLoc(), Accessor + "()");
+    << FixItHint::CreateReplacement(ME->getMemberLoc(), Accessor);
 }

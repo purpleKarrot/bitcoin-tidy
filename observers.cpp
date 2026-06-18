@@ -5,8 +5,8 @@ OutpointObservers::OutpointObservers(
   : ObserversBase(CheckName, Context)
 {
   ClassName = "COutPoint";
-  MemberToAccessor["n"] = "GetIndex";
-  MemberToAccessor["hash"] = "GetTxid";
+  MemberToAccessor["n"] = "GetIndex()";
+  MemberToAccessor["hash"] = "GetTxid()";
 }
 
 TxinObservers::TxinObservers(
@@ -14,10 +14,10 @@ TxinObservers::TxinObservers(
   : ObserversBase(CheckName, Context)
 {
   ClassName = "CTxIn";
-  MemberToAccessor["prevout"] = "GetPrevout";
-  MemberToAccessor["scriptSig"] = "GetScript";
-  MemberToAccessor["nSequence"] = "GetSequence";
-  MemberToAccessor["scriptWitness"] = "GetWitness";
+  MemberToAccessor["prevout"] = "GetPrevout()";
+  MemberToAccessor["scriptSig"] = "GetScript()";
+  MemberToAccessor["nSequence"] = "GetSequence()";
+  MemberToAccessor["scriptWitness"] = "GetWitness()";
 }
 
 TxoutObservers::TxoutObservers(
@@ -25,8 +25,8 @@ TxoutObservers::TxoutObservers(
   : ObserversBase(CheckName, Context)
 {
   ClassName = "CTxOut";
-  MemberToAccessor["nValue"] = "GetAmount";
-  MemberToAccessor["scriptPubKey"] = "GetScript";
+  MemberToAccessor["nValue"] = "GetAmount()";
+  MemberToAccessor["scriptPubKey"] = "GetScript()";
 }
 
 TxObservers::TxObservers(
@@ -34,23 +34,10 @@ TxObservers::TxObservers(
   : ObserversBase(CheckName, Context)
 {
   ClassName = "CTransaction";
-  MemberToAccessor["vin"] = "GetInputs";
-  MemberToAccessor["vout"] = "GetOutputs";
-  MemberToAccessor["version"] = "GetVersion";
-  MemberToAccessor["nLockTime"] = "GetLocktime";
-}
-
-BlockHdrObservers::BlockHdrObservers(
-  clang::StringRef CheckName, clang::tidy::ClangTidyContext* Context)
-  : ObserversBase(CheckName, Context)
-{
-  ClassName = "CBlockHeader";
-  MemberToAccessor["nVersion"] = "GetVersion";
-  MemberToAccessor["hashPrevBlock"] = "GetPrevBlock";
-  MemberToAccessor["hashMerkleRoot"] = "GetMerkeRoot";
-  MemberToAccessor["nTime"] = "GetTime";
-  MemberToAccessor["nBits"] = "GetBits";
-  MemberToAccessor["nNonce"] = "GetNonce";
+  MemberToAccessor["vin"] = "GetInputs()";
+  MemberToAccessor["vout"] = "GetOutputs()";
+  MemberToAccessor["version"] = "GetVersion()";
+  MemberToAccessor["nLockTime"] = "GetLockTime()";
 }
 
 BlockObservers::BlockObservers(
@@ -58,13 +45,13 @@ BlockObservers::BlockObservers(
   : ObserversBase(CheckName, Context)
 {
   ClassName = "CBlock";
-  MemberToAccessor["nVersion"] = "GetHeader().GetVersion";
-  MemberToAccessor["hashPrevBlock"] = "GetHeader().GetPrevBlock";
-  MemberToAccessor["hashMerkleRoot"] = "GetHeader().GetMerkeRoot";
-  MemberToAccessor["nTime"] = "GetHeader().GetTime";
-  MemberToAccessor["nBits"] = "GetHeader().GetBits";
-  MemberToAccessor["nNonce"] = "GetHeader().GetNonce";
-  MemberToAccessor["vtx"] = "GetTransactions";
+  MemberToAccessor["nVersion"] = "GetHeader().nVersion";
+  MemberToAccessor["hashPrevBlock"] = "GetHeader().hashPrevBlock";
+  MemberToAccessor["hashMerkleRoot"] = "GetHeader().hashMerkleRoot";
+  MemberToAccessor["nTime"] = "GetHeader().nTime";
+  MemberToAccessor["nBits"] = "GetHeader().nBits";
+  MemberToAccessor["nNonce"] = "GetHeader().nNonce";
+  MemberToAccessor["vtx"] = "GetTransactions()";
 }
 
 CoinObservers::CoinObservers(
@@ -72,7 +59,7 @@ CoinObservers::CoinObservers(
   : ObserversBase(CheckName, Context)
 {
   ClassName = "Coin";
-  MemberToAccessor["out"] = "GetOutput";
-  MemberToAccessor["fCoinBase"] = "IsCoinBase";
-  MemberToAccessor["nHeight"] = "GetHeight";
+  MemberToAccessor["out"] = "GetOutput()";
+  MemberToAccessor["fCoinBase"] = "IsCoinBase()";
+  MemberToAccessor["nHeight"] = "GetHeight()";
 }
