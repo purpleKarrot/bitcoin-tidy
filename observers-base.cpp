@@ -1,9 +1,46 @@
 #include "observers-base.h"
 
+#include <clang/Analysis/Analyses/ExprMutationAnalyzer.h>
 #include <clang/Lex/Lexer.h>
 
 using namespace clang;
 using namespace clang::ast_matchers;
+
+static bool isRangeForMutated(
+  clang::MemberExpr const* ME, clang::ASTContext& Ctx)
+{
+  DynTypedNode Current = DynTypedNode::create(*ME);
+  while (true) {
+    auto Parents = Ctx.getParents(Current);
+    if (Parents.empty())
+      break;
+    Current = Parents[0];
+
+    if (auto const* ForRange = Current.get<CXXForRangeStmt>()) {
+      if (auto const* LoopVar = ForRange->getLoopVariable()) {
+        QualType LoopVarType = LoopVar->getType();
+        if (auto const* RefType = LoopVarType->getAs<ReferenceType>()) {
+          if (!RefType->getPointeeType().isConstQualified())
+            return true;
+        }
+        if (auto const* PtrType = LoopVarType->getAs<PointerType>()) {
+          if (!PtrType->getPointeeType().isConstQualified())
+            return true;
+        }
+      }
+      return false;
+    }
+
+    // Stop at statement boundaries that can't be part of a
+    // range-for init chain.
+    if (
+      Current.get<CompoundStmt>() || Current.get<ForStmt>() ||
+      Current.get<WhileStmt>() || Current.get<DoStmt>() ||
+      Current.get<IfStmt>() || Current.get<SwitchStmt>())
+      break;
+  }
+  return false;
+}
 
 void ObserversBase::registerMatchers(MatchFinder* Finder)
 {
@@ -43,30 +80,32 @@ void ObserversBase::check(MatchFinder::MatchResult const& Result)
     return;
   }
 
-  std::string const& Accessor = It->second;
-
-  // Skip obvious write accesses.
-  auto Parents = Result.Context->getParents(*ME);
-  if (!Parents.empty()) {
-    if (auto const* CO = Parents[0].get<CXXOperatorCallExpr>()) {
-      if (CO->getOperator() == OO_Equal) {
-        return;
-      }
+  Stmt const* EnclosingStmt = nullptr;
+  DynTypedNode Current = DynTypedNode::create(*ME);
+  while (true) {
+    auto Parents = Result.Context->getParents(Current);
+    if (Parents.empty()) {
+      break;
     }
-
-    if (auto const* BO = Parents[0].get<BinaryOperator>()) {
-      if (BO->isAssignmentOp() && BO->getLHS() == ME) {
-        return;
-      }
-    }
-
-    if (auto const* UO = Parents[0].get<UnaryOperator>()) {
-      if (UO->isIncrementDecrementOp() || UO->getOpcode() == UO_AddrOf) {
-        return;
-      }
+    Current = Parents[0];
+    if (auto const* FuncDecl = Current.get<FunctionDecl>()) {
+      EnclosingStmt = FuncDecl->getBody();
+      break;
     }
   }
 
+  if (EnclosingStmt) {
+    ExprMutationAnalyzer Analyzer(*EnclosingStmt, *Result.Context);
+    if (Analyzer.isMutated(ME)) {
+      return;
+    }
+  }
+
+  if (isRangeForMutated(ME, *Result.Context)) {
+    return;
+  }
+
+  std::string const& Accessor = It->second;
   diag(ME->getMemberLoc(), "replace direct member access with accessor")
     << FixItHint::CreateReplacement(ME->getMemberLoc(), Accessor);
 }

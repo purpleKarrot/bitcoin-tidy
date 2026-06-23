@@ -30,10 +30,10 @@ public:
     clang::StringRef CheckName, clang::tidy::ClangTidyContext* Context);
 };
 
-class BlockHdrObservers : public ObserversBase
+class TxMutObservers : public ObserversBase
 {
 public:
-  BlockHdrObservers(
+  TxMutObservers(
     clang::StringRef CheckName, clang::tidy::ClangTidyContext* Context);
 };
 

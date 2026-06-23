@@ -40,6 +40,17 @@ TxObservers::TxObservers(
   MemberToAccessor["nLockTime"] = "GetLockTime()";
 }
 
+TxMutObservers::TxMutObservers(
+  clang::StringRef CheckName, clang::tidy::ClangTidyContext* Context)
+  : ObserversBase(CheckName, Context)
+{
+  ClassName = "CMutableTransaction";
+  MemberToAccessor["vin"] = "GetInputs()";
+  MemberToAccessor["vout"] = "GetOutputs()";
+  MemberToAccessor["version"] = "GetVersion()";
+  MemberToAccessor["nLockTime"] = "GetLockTime()";
+}
+
 BlockObservers::BlockObservers(
   clang::StringRef CheckName, clang::tidy::ClangTidyContext* Context)
   : ObserversBase(CheckName, Context)

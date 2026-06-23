@@ -17,6 +17,7 @@ public:
     Factories.registerCheck<TxDeref>("bitcoin-tx-deref");
     Factories.registerCheck<TxinObservers>("bitcoin-txin-observers");
     Factories.registerCheck<TxObservers>("bitcoin-tx-observers");
+    Factories.registerCheck<TxMutObservers>("bitcoin-txmut-observers");
     Factories.registerCheck<TxoutObservers>("bitcoin-txout-observers");
   }
 };
