@@ -4,7 +4,7 @@ project(BitcoinTidy)
 find_package(Clang REQUIRED)
 
 add_library(bitcoin-tidy MODULE
-  outpoint-assignment.cpp
+  combine-assignments.cpp
   tx-deref.cpp
   main.cpp
   use-observers.cpp
